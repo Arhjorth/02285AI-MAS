@@ -2,6 +2,8 @@ package searchclient;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
+import java.util.Stack;
+
 import searchclient.Memory;
 import searchclient.NotImplementedException;
 
