@@ -5,12 +5,25 @@ import java.util.Comparator;
 import searchclient.NotImplementedException;
 
 public abstract class Heuristic implements Comparator<Node> {
+	private static char[][] goalsCopy; 
 	public Heuristic(Node initialState) {
 		// Here's a chance to pre-process the static parts of the level.
+		goalsCopy = initialState.goals;
 	}
 
 	public int h(Node n) {
-		throw new NotImplementedException();
+		int estimate = n.MAX_ROW*n.MAX_COL;//Worst case where "all" cells are goals
+
+		for (int row = 1; row < n.MAX_ROW - 1; row++) {
+			for (int col = 1; col < n.MAX_COL - 1; col++) {
+				char g = goalsCopy[row][col];
+				char b = Character.toLowerCase(n.boxes[row][col]);
+				if (g > 0 && b != g) {
+					estimate += 1;  // If the cell is a goalcell but there is no box on it, then add 1 to the estimate
+				}
+			}
+		}
+		return estimate;
 	}
 
 	public abstract int f(Node n);
