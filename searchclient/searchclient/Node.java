@@ -11,10 +11,8 @@ import searchclient.Command.Type;
 public class Node {
 	private static final Random RND = new Random(1);
 
-	//public static int MAX_ROW = 70;
-	public static int MAX_ROW;
-	//public static int MAX_COL = 70;
-	public static int MAX_COL;
+	public static int MAX_ROW = StaticLevel.getInstance().getMaxRow();
+	public static int MAX_COL = StaticLevel.getInstance().getMaxCol();
 
 	public int agentRow;
 	public int agentCol;

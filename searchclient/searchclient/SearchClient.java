@@ -23,18 +23,20 @@ public class SearchClient {
 		}
 
 		boolean agentFound = false;
-		this.initialState = new Node(null);
 
 		//Buffer lines to obtain max_row and max_col
 		List<String> lines = new ArrayList<>();
-		Node.MAX_COL = 0;
+		int maxCol=0;
 		while (!serverLine.equals("")) {
-			if (serverLine.length() > Node.MAX_COL)
-				Node.MAX_COL = serverLine.length();
+			if (serverLine.length() > maxCol)
+				maxCol = serverLine.length();
 			lines.add(serverLine);
 			serverLine = serverMessages.readLine();
 		}
-		Node.MAX_ROW = lines.size();
+
+		StaticLevel staticLevel = StaticLevel.createInstance(lines.size(), maxCol);
+		// Reset the node to get updated dimensions
+        this.initialState = new Node(null);
 
 		int row = 0;
 		for (String line : lines){
