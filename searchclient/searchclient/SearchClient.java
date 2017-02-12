@@ -38,8 +38,8 @@ public class SearchClient {
 
 		int row = 0;
 		for (String line : lines){
-			for (int col = 0; col < serverLine.length(); col++) {
-				char chr = serverLine.charAt(col);
+			for (int col = 0; col < line.length(); col++) {
+				char chr = line.charAt(col);
 
 				if (chr == '+') { // Wall.
 					Node.walls[row][col] = true;
@@ -62,7 +62,7 @@ public class SearchClient {
 					System.exit(1);
 				}
 			}
-			serverLine = serverMessages.readLine();
+			//serverLine = serverMessages.readLine();
 			row++;
 		}
 	}
