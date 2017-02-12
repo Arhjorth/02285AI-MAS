@@ -3,7 +3,9 @@ package searchclient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import searchclient.Memory;
 import searchclient.Strategy.*;
@@ -14,22 +16,33 @@ public class SearchClient {
 
 	public SearchClient(BufferedReader serverMessages) throws Exception {
 		// Read lines specifying colors
-		String line = serverMessages.readLine();
-		if (line.matches("^[a-z]+:\\s*[0-9A-Z](\\s*,\\s*[0-9A-Z])*\\s*$")) {
+		String serverLine = serverMessages.readLine();
+		if (serverLine.matches("^[a-z]+:\\s*[0-9A-Z](\\s*,\\s*[0-9A-Z])*\\s*$")) {
 			System.err.println("Error, client does not support colors.");
 			System.exit(1);
 		}
 
-		int row = 0;
 		boolean agentFound = false;
 		this.initialState = new Node(null);
 
-		while (!line.equals("")) {
-			for (int col = 0; col < line.length(); col++) {
-				char chr = line.charAt(col);
+		//Buffer lines to obtain max_row and max_col
+		List<String> lines = new ArrayList<>();
+		Node.MAX_COL = 0;
+		while (!serverLine.equals("")) {
+			if (serverLine.length() > Node.MAX_COL)
+				Node.MAX_COL = serverLine.length();
+			lines.add(serverLine);
+			serverLine = serverMessages.readLine();
+		}
+		Node.MAX_ROW = lines.size();
+
+		int row = 0;
+		for (String line : lines){
+			for (int col = 0; col < serverLine.length(); col++) {
+				char chr = serverLine.charAt(col);
 
 				if (chr == '+') { // Wall.
-					this.initialState.walls[row][col] = true;
+					Node.walls[row][col] = true;
 				} else if ('0' <= chr && chr <= '9') { // Agent.
 					if (agentFound) {
 						System.err.println("Error, not a single agent level");
@@ -41,7 +54,7 @@ public class SearchClient {
 				} else if ('A' <= chr && chr <= 'Z') { // Box.
 					this.initialState.boxes[row][col] = chr;
 				} else if ('a' <= chr && chr <= 'z') { // Goal.
-					this.initialState.goals[row][col] = chr;
+					Node.goals[row][col] = chr;
 				} else if (chr == ' ') {
 					// Free space.
 				} else {
@@ -49,7 +62,7 @@ public class SearchClient {
 					System.exit(1);
 				}
 			}
-			line = serverMessages.readLine();
+			serverLine = serverMessages.readLine();
 			row++;
 		}
 	}

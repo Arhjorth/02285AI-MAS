@@ -11,8 +11,10 @@ import searchclient.Command.Type;
 public class Node {
 	private static final Random RND = new Random(1);
 
-	public static int MAX_ROW = 70;
-	public static int MAX_COL = 70;
+	//public static int MAX_ROW = 70;
+	public static int MAX_ROW;
+	//public static int MAX_COL = 70;
+	public static int MAX_COL;
 
 	public int agentRow;
 	public int agentCol;
@@ -27,9 +29,9 @@ public class Node {
 	// this.walls[row][col] is true if there's a wall at (row, col)
 	//
 
-	public boolean[][] walls = new boolean[MAX_ROW][MAX_COL];
+	public static boolean[][] walls = new boolean[MAX_ROW][MAX_COL];
+	public static char[][] goals = new char[MAX_ROW][MAX_COL];
 	public char[][] boxes = new char[MAX_ROW][MAX_COL];
-	public char[][] goals = new char[MAX_ROW][MAX_COL];
 
 	public Node parent;
 	public Command action;
