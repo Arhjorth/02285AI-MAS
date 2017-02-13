@@ -13,6 +13,21 @@ public abstract class Heuristic implements Comparator<Node> {
 
 	public int h(Node n) {
 		int estimate = n.MAX_ROW*n.MAX_COL;//Worst case where "all" cells are goals
+		
+		int dist = n.MAX_ROW*n.MAX_COL;
+		
+		for (int row = 1; row < n.MAX_ROW - 1; row++) {
+			for (int col = 1; col < n.MAX_COL - 1; col++) {
+				char b = Character.toLowerCase(n.boxes[row][col]);
+				if (b > 0){
+					int d = Math.abs(row-n.agentRow) + Math.abs(col-n.agentCol);
+					if (dist > d){
+						dist = d; 
+					}
+				}	
+			}
+		}
+		
 
 		for (int row = 1; row < n.MAX_ROW - 1; row++) {
 			for (int col = 1; col < n.MAX_COL - 1; col++) {
@@ -23,7 +38,7 @@ public abstract class Heuristic implements Comparator<Node> {
 				}
 			}
 		}
-		return estimate;
+		return estimate + dist;
 	}
 
 	public abstract int f(Node n);
